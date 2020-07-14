@@ -430,6 +430,9 @@ public class ExtensionLoaderTest {
         Assertions.assertSame(list.get(1).getClass(), OrderActivateExtImpl1.class);
     }
 
+    /**
+     * 向扩展类注入其依赖的属性，如扩展类A又依赖了扩展类B.
+     */
     @Test
     public void testInjectExtension() {
         // test default
