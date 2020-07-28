@@ -274,7 +274,7 @@ public class ExtensionLoader<T> {
                 if (DEFAULT_KEY.equals(name)) {
                     if (!loadedExtensions.isEmpty()) {
                         activateExtensions.addAll(0, loadedExtensions);
-                        loadedExtensions.clear();
+                        loadedExtensions.clear();  // name为DEFAULT_KEY时，loadedExtensions为啥要clear?  ----因为default的extension要放在前面。如果没有这个出发点，这个if语句块就是多余的。
                     }
                 } else {
                     loadedExtensions.add(getExtension(name));
