@@ -242,7 +242,7 @@ public class ExtensionLoader<T> {
         List<String> names = values == null ? new ArrayList<>(0) : Arrays.asList(values);
         if (!names.contains(REMOVE_VALUE_PREFIX + DEFAULT_KEY)) {
             getExtensionClasses();
-            for (Map.Entry<String, Object> entry : cachedActivates.entrySet()) {
+            for (Map.Entry<String, Object> entry : cachedActivates.entrySet()) {  // 这个循环主要是add dubbo.internal目录下的扩展类对象getExtensionClasses()）
                 String name = entry.getKey();
                 Object activate = entry.getValue();
 
@@ -258,7 +258,7 @@ public class ExtensionLoader<T> {
                     continue;
                 }
                 if (isMatchGroup(group, activateGroup)
-                        && !names.contains(name)
+                        && !names.contains(name)  // names来自@Activate注解，name来自dubbo.internal目录。这个判断可以防止activateExtensions重复add
                         && !names.contains(REMOVE_VALUE_PREFIX + name)
                         && isActive(activateValue, url)) {
                     activateExtensions.add(getExtension(name));
@@ -267,14 +267,14 @@ public class ExtensionLoader<T> {
             activateExtensions.sort(ActivateComparator.COMPARATOR);
         }
         List<T> loadedExtensions = new ArrayList<>();
-        for (int i = 0; i < names.size(); i++) {
+        for (int i = 0; i < names.size(); i++) {   // 这个循环主要是add @Activate注解中指定的那些扩展类对象
             String name = names.get(i);
             if (!name.startsWith(REMOVE_VALUE_PREFIX)
                     && !names.contains(REMOVE_VALUE_PREFIX + name)) {
                 if (DEFAULT_KEY.equals(name)) {
                     if (!loadedExtensions.isEmpty()) {
                         activateExtensions.addAll(0, loadedExtensions);
-                        loadedExtensions.clear();  // name为DEFAULT_KEY时，loadedExtensions为啥要clear?  ----因为default的extension要放在前面。如果没有这个出发点，这个if语句块就是多余的。
+                        loadedExtensions.clear();  // name为DEFAULT_KEY时，loadedExtensions为啥要clear?  ----因为default的扩展类对象不用再加载了。如果没有这个出发点，这个if语句块就是多余的。
                     }
                 } else {
                     loadedExtensions.add(getExtension(name));
