@@ -1624,3 +1624,14 @@ class URL implements Serializable {
     }
 
 }
+/**
+ * public static URL valueOf(String url)方法解析过程：
+ */
+/*
+1，separator between body and parameters
+2，解析protocol
+3，解析path
+4，解析username和password
+5，解析端口
+6，解析host
+*/
